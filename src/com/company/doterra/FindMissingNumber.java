@@ -26,19 +26,35 @@
 
 package com.company.doterra;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class FindMissingNumber {
 
     public static void main(String[] args) {
     //	 Accept integers from user input
-        int [] numberArray = getNumberArray();
+        int max = getMaxNumberFromUserInput();
+        //create a list containing the numbers 1 to max
+        List <Integer> numberList = makeSequence(1, max);
 
+        //Create a random number x between 0 and the size of the list. Take the number being at index x in the list,
+        //and store the value of the list to an array. Remove it from the list. Repeat this until the the last element
+        // of the list is left
+        int [] numberArray = new int[max - 1];
+        int idx = 0;
+        while (numberList.size() > 1) {
+            int x = getNextRandom(numberList.size());
+            if ( x >= 0 && x < numberList.size()) {
+                numberArray[idx++] = numberList.get(x);
+                numberList.remove(x);
+            }
+        }
 
     // Find the maximum number in an array
         int maxNumber = findMaxNumber(numberArray);
-        int minNumber = findMinNumber(numberArray);
-        int missingNumber = findMissingNumber(minNumber, maxNumber, numberArray);
+        int missingNumber = findMissingNumber(1, maxNumber, numberArray);
         if (missingNumber == -111) {
             System.out.println();
             System.out.println("*** There is no missing number ***");
@@ -49,18 +65,43 @@ public class FindMissingNumber {
         }
     }
 
-    private static int[] getNumberArray() {
+    private static List<Integer> makeSequence(int begin, int end) {
+        List <Integer> numberList = new ArrayList<>(end - begin + 1);
+        for (int i = begin; i <= end; i++ ) {
+            numberList.add(i);
+        }
+        return numberList;
+    }
+
+    private static int getNextRandom(int max) {
+        int min = 0;
+        Random rand = new Random();
+
+        // nextInt is normally exclusive of the top value,
+        // so add 1 to make it inclusive
+        int number = rand.nextInt(max - min + 1) + min;
+        return number;
+    }
+
+    private static int getMaxNumberFromUserInput() {
         int n;
         Scanner s = new Scanner(System.in);
-        System.out.print("Enter number of elements in the array:");
+        System.out.print("Please enter a positive number (> 2) :");
         n = s.nextInt();
-        int numberArray[] = new int[n];
-        System.out.println("Enter elements of array:");
-        for(int i = 0; i < n; i++)
-        {
-            numberArray[i] = s.nextInt();
-        }
-        return numberArray;
+        return n;
+    }
+
+    private static void setNumberArray(int number, int[] numberArray, int maxNumber) {
+            int randomNumber = getNextRandom(maxNumber);
+            if (number <= 0) {
+                return;
+            } else {
+                ///find a way to insert a unique number, maybe to use another recursive method?
+                numberArray[number - 1] = randomNumber;
+                System.out.println("randomNumber : " + randomNumber);
+                --number;
+                setNumberArray(number, numberArray, maxNumber);
+            }
     }
 
     private static int findMissingNumber(int minNumber, int maxNumber, int[] numberArray) {
@@ -80,20 +121,6 @@ public class FindMissingNumber {
             }
         }
         return missingNumber;
-    }
-
-    private static int findMinNumber(int[] numberArray) {
-        System.out.println();
-        System.out.print("Finding a minimum number---> ");
-        int minNumber = 999;
-        for (int i = 0; i < numberArray.length; i++) {
-            if (minNumber > numberArray[i]) {
-                minNumber = numberArray[i];
-            }
-        }
-        System.out.println(minNumber);
-        return minNumber;
-
     }
 
     private static int findMaxNumber(int[] numberArray) {
