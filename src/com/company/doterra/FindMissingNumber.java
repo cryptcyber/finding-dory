@@ -55,6 +55,17 @@ public class FindMissingNumber {
     // Find the maximum number in an array
         int maxNumber = findMaxNumber(numberArray);
         int missingNumber = findMissingNumber(1, maxNumber, numberArray);
+        printNumberArrayWithMissingNumber(numberArray, missingNumber);
+    }
+
+    private static void printNumberArrayWithMissingNumber(int[] numberArray, int missingNumber) {
+        System.out.println("*** Auto-generated number array ***");
+
+        for(int number : numberArray ) {
+            System.out.print(number);
+            System.out.print(" ");
+        }
+
         if (missingNumber == -111) {
             System.out.println();
             System.out.println("*** There is no missing number ***");
@@ -124,8 +135,6 @@ public class FindMissingNumber {
     }
 
     private static int findMaxNumber(int[] numberArray) {
-        System.out.println();
-        System.out.print("Finding a maximum number---> ");
         int maxNumber = -999;
         for (int i = 0; i < numberArray.length; i++) {
             if (maxNumber < numberArray[i]) {
